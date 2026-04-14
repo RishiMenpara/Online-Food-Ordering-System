@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FOS — Online Food Ordering System | DBMS Project</title>
+  <meta name="description" content="Online Food Ordering System — DBMS project dashboard showing customers, orders, restaurants, menu items, payments, deliveries, and SQL queries." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">🍕</div>
+    <div>
+      <h1>FoodieDB</h1>
+      <span>DBMS Project</span>
+    </div>
+  </div>
+
+  <div class="sidebar-section-label">Main</div>
+  <div class="nav-item active" onclick="switchTab('dashboard',this)" id="nav-dashboard">
+    <span class="nav-icon">🏠</span>
+    <span>Dashboard</span>
+  </div>
+
+  <div class="sidebar-section-label">Tables</div>
+  <div class="nav-item" onclick="switchTab('customers',this)" id="nav-customers">
+    <span class="nav-icon">👤</span>
+    <span>Customers</span>
+  </div>
+  <div class="nav-item" onclick="switchTab('restaurants',this)" id="nav-restaurants">
+    <span class="nav-icon">🏪</span>
+    <span>Restaurants</span>
+  </div>
+  <div class="nav-item" onclick="switchTab('menu',this)" id="nav-menu">
+    <span class="nav-icon">🍔</span>
+    <span>Menu Items</span>
+  </div>
+  <div class="nav-item" onclick="switchTab('orders',this)" id="nav-orders">
+    <span class="nav-icon">📦</span>
+    <span>Orders</span>
+  </div>
+  <div class="nav-item" onclick="switchTab('orderitems',this)" id="nav-orderitems">
+    <span class="nav-icon">🧾</span>
+    <span>Order Items</span>
+  </div>
+  <div class="nav-item" onclick="switchTab('payments',this)" id="nav-payments">
+    <span class="nav-icon">💳</span>
+    <span>Payments</span>
+  </div>
+  <div class="nav-item" onclick="switchTab('deliveryperson',this)" id="nav-deliveryperson">
+    <span class="nav-icon">🚴</span>
+    <span>Delivery Person</span>
+  </div>
+  <div class="nav-item" onclick="switchTab('delivery',this)" id="nav-delivery">
+    <span class="nav-icon">🛵</span>
+    <span>Delivery</span>
+  </div>
+
+  <div class="sidebar-section-label">SQL</div>
+  <div class="nav-item" onclick="switchTab('queries',this)" id="nav-queries">
+    <span class="nav-icon">🔍</span>
+    <span>SQL Query Lab</span>
+    <span class="nav-badge">80+</span>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════════════════
+     MAIN
+════════════════════════════════════════════════════ -->
+<div class="main">
+  <header class="topbar">
+    <div>
+      <div class="topbar-title" id="topbar-title">📊 Dashboard</div>
+      <div class="topbar-sub" id="topbar-sub">Online Food Ordering System — FOS Database</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-status">
+        <div class="status-dot"></div>
+        DB Connected
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ══════════════════════════
+         DASHBOARD TAB
+    ══════════════════════════ -->
+    <div class="tab-panel active" id="tab-dashboard">
+      <div class="hero-banner">
+        <div class="hero-text">
+          <h2>Welcome to FoodieDB 🎉</h2>
+          <p>Live analytics from your MySQL <strong>FOS</strong> database — all 8 tables, 80+ queries, full DBMS coverage.</p>
+        </div>
+        <div class="hero-emoji">🍕</div>
+      </div>
+
+      <div class="stats-grid" id="dashboard-stats">
+        <div class="stat-card c-violet">
+          <div class="stat-color-bar"></div>
+          <div class="stat-bg">👤</div>
+          <div class="stat-icon-wrap">👤</div>
+          <div class="stat-value" id="stat-customers">—</div>
+          <div class="stat-label">Total Customers</div>
+        </div>
+        <div class="stat-card c-orange">
+          <div class="stat-color-bar"></div>
+          <div class="stat-bg">🏪</div>
+          <div class="stat-icon-wrap">🏪</div>
+          <div class="stat-value" id="stat-restaurants">—</div>
+          <div class="stat-label">Restaurants</div>
+        </div>
+        <div class="stat-card c-teal">
+          <div class="stat-color-bar"></div>
+          <div class="stat-bg">📦</div>
+          <div class="stat-icon-wrap">📦</div>
+          <div class="stat-value" id="stat-orders">—</div>
+          <div class="stat-label">Total Orders</div>
+        </div>
+        <div class="stat-card c-pink">
+          <div class="stat-color-bar"></div>
+          <div class="stat-bg">💰</div>
+          <div class="stat-icon-wrap">💰</div>
+          <div class="stat-value" id="stat-revenue">—</div>
+          <div class="stat-label">Total Revenue (₹)</div>
+        </div>
+        <div class="stat-card c-green">
+          <div class="stat-color-bar"></div>
+          <div class="stat-bg">📊</div>
+          <div class="stat-icon-wrap">📊</div>
+          <div class="stat-value" id="stat-avg">—</div>
+          <div class="stat-label">Avg Order Value (₹)</div>
+        </div>
+        <div class="stat-card c-amber">
+          <div class="stat-color-bar"></div>
+          <div class="stat-bg">🏆</div>
+          <div class="stat-icon-wrap">🏆</div>
+          <div class="stat-value" id="stat-max">—</div>
+          <div class="stat-label">Highest Order (₹)</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🏪 Revenue by Restaurant <span class="tag">GROUP BY</span></div>
+          </div>
+          <div class="chart-bars" id="revenue-chart"></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">💳 Payment Methods <span class="tag">GROUP BY</span></div>
+          </div>
+          <div id="payment-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════
+         CUSTOMERS TAB
+    ══════════════════════════ -->
+    <div class="tab-panel" id="tab-customers">
+      <div class="page-header">
+        <div class="page-title">👤 <span>Customers</span></div>
+        <button class="btn btn-primary" onclick="openModal('modal-add-customer')">➕ Add Customer</button>
+      </div>
+      <div class="btn-group" style="margin-bottom:16px">
+        <button class="btn btn-ghost btn-sm" onclick="loadCustomers()">All Customers <span class="dbms-tag dml" style="margin-left:4px">SELECT *</span></button>
+        <button class="btn btn-ghost btn-sm" onclick="loadActiveCustomers()">Ordered Customers <span class="dbms-tag sub" style="margin-left:4px">Subquery</span></button>
+        <button class="btn btn-ghost btn-sm" onclick="loadHighSpenders()">High Spenders <span class="dbms-tag sub" style="margin-left:4px">Subquery</span></button>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title" id="customers-view-title">All Customers</div>
+          <div class="filter-bar">
+            <input class="form-input" id="customer-search" placeholder="🔍 Search by name..." oninput="filterTable('customers-table','customer-search',0)" />
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table id="customers-table">
+            <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Address</th><th>Actions</th></tr></thead>
+            <tbody id="customers-body"><tr><td colspan="6"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════
+         RESTAURANTS TAB
+    ══════════════════════════ -->
+    <div class="tab-panel" id="tab-restaurants">
+      <div class="page-header">
+        <div class="page-title">🏪 <span>Restaurants</span></div>
+        <button class="btn btn-orange" onclick="openModal('modal-add-restaurant')">➕ Add Restaurant</button>
+      </div>
+      <div class="btn-group" style="margin-bottom:16px">
+        <button class="btn btn-ghost btn-sm" onclick="loadRestaurants()">All Restaurants</button>
+        <button class="btn btn-ghost btn-sm" onclick="loadRestaurantStats()">Revenue Stats <span class="dbms-tag agg" style="margin-left:4px">GROUP BY</span></button>
+        <button class="btn btn-ghost btn-sm" onclick="loadRestaurantsWithMenu()">Has Menu Items <span class="dbms-tag sub" style="margin-left:4px">Subquery</span></button>
+      </div>
+      <div class="filter-bar">
+        <select class="form-select" id="city-filter" onchange="filterByCity()" style="min-width:180px">
+          <option value="">🌆 All Cities</option>
+        </select>
+      </div>
+      <div class="card">
+        <div class="card-title" id="restaurants-view-title" style="margin-bottom:14px">All Restaurants</div>
+        <div class="table-wrapper">
+          <table id="restaurants-table">
+            <thead><tr id="restaurants-head"><th>ID</th><th>Name</th><th>Location</th><th>Phone</th></tr></thead>
+            <tbody id="restaurants-body"><tr><td colspan="4"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════
+         MENU ITEMS TAB
+    ══════════════════════════ -->
+    <div class="tab-panel" id="tab-menu">
+      <div class="page-header">
+        <div class="page-title">🍔 <span>Menu Items</span></div>
+        <button class="btn btn-teal" onclick="openModal('modal-add-menu')">➕ Add Item <span class="dbms-tag trigger" style="margin-left:6px">TRIGGER</span></button>
+      </div>
+      <div class="btn-group" style="margin-bottom:16px">
+        <button class="btn btn-ghost btn-sm" onclick="loadMenu()">All Items</button>
+        <button class="btn btn-ghost btn-sm" onclick="loadExpensiveItems()">Above Avg Price <span class="dbms-tag sub" style="margin-left:4px">Subquery</span></button>
+        <button class="btn btn-ghost btn-sm" onclick="loadMenuCategories()">By Category <span class="dbms-tag agg" style="margin-left:4px">GROUP BY</span></button>
+        <button class="btn btn-ghost btn-sm" onclick="loadUnorderedItems()">Never Ordered <span class="dbms-tag sub" style="margin-left:4px">NOT IN</span></button>
+      </div>
+      <div class="card">
+        <div class="card-title" id="menu-view-title" style="margin-bottom:14px">All Menu Items (JOIN with Restaurant)</div>
+        <div class="table-wrapper">
+          <table id="menu-table">
+            <thead><tr id="menu-head"><th>ID</th><th>Item Name</th><th>Price (₹)</th><th>Category</th><th>Restaurant</th><th>Actions</th></tr></thead>
+            <tbody id="menu-body"><tr><td colspan="6"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════
+         ORDERS TAB
+    ══════════════════════════ -->
+    <div class="tab-panel" id="tab-orders">
+      <div class="page-header">
+        <div class="page-title">📦 <span>Orders</span></div>
+      </div>
+      <div class="btn-group" style="margin-bottom:16px">
+        <button class="btn btn-ghost btn-sm" onclick="loadOrders()">All Orders <span class="dbms-tag join" style="margin-left:4px">3-JOIN</span></button>
+        <button class="btn btn-ghost btn-sm" onclick="loadHighValueOrders()">High Value (>₹400) <span class="dbms-tag view" style="margin-left:4px">VIEW</span></button>
+        <button class="btn btn-ghost btn-sm" onclick="loadCustomerStats()">Customer Stats <span class="dbms-tag agg" style="margin-left:4px">GROUP BY</span></button>
+        <button class="btn btn-ghost btn-sm" onclick="loadNoDeliveryOrders()">No Delivery <span class="dbms-tag sub" style="margin-left:4px">NOT IN</span></button>
+      </div>
+      <div class="filter-bar">
+        <input class="form-input" id="order-min" type="number" placeholder="Min ₹" style="max-width:110px" />
+        <input class="form-input" id="order-max" type="number" placeholder="Max ₹" style="max-width:110px" />
+        <button class="btn btn-primary btn-sm" onclick="loadOrdersByRange()">Filter BETWEEN</button>
+        <button class="btn btn-ghost btn-sm" onclick="loadOrders()">Clear</button>
+      </div>
+      <div class="card">
+        <div class="card-title" id="orders-view-title" style="margin-bottom:14px">All Orders</div>
+        <div class="table-wrapper">
+          <table id="orders-table">
+            <thead><tr id="orders-head"><th>Order ID</th><th>Date</th><th>Customer</th><th>Restaurant</th><th>Amount (₹)</th></tr></thead>
+            <tbody id="orders-body"><tr><td colspan="5"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════
+         ORDER ITEMS TAB
+    ══════════════════════════ -->
+    <div class="tab-panel" id="tab-orderitems">
+      <div class="page-header">
+        <div class="page-title">🧾 <span>Order Items</span></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Order Items Detail <span class="tag">4-Table JOIN</span></div>
+        </div>
+        <div class="table-wrapper">
+          <table id="orderitems-table">
+            <thead><tr><th>Order ID</th><th>Customer</th><th>Item Name</th><th>Qty</th><th>Sub Total (₹)</th></tr></thead>
+            <tbody id="orderitems-body"><tr><td colspan="5"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════
+         PAYMENTS TAB
+    ══════════════════════════ -->
+    <div class="tab-panel" id="tab-payments">
+      <div class="page-header">
+        <div class="page-title">💳 <span>Payments</span></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Payment Summary <span class="tag">GROUP BY</span></div>
+          </div>
+          <div id="payment-summary-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">All Transactions <span class="tag">3-JOIN</span></div>
+          </div>
+          <div class="table-wrapper">
+            <table id="payments-table">
+              <thead><tr><th>ID</th><th>Customer</th><th>Method</th><th>Status</th><th>Amount (₹)</th></tr></thead>
+              <tbody id="payments-body"><tr><td colspan="5"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════
+         DELIVERY PERSON TAB
+    ══════════════════════════ -->
+    <div class="tab-panel" id="tab-deliveryperson">
+      <div class="page-header">
+        <div class="page-title">🚴 <span>Delivery Persons</span></div>
+        <button class="btn btn-primary" onclick="openModal('modal-add-dp')">➕ Add Person</button>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">All Delivery Personnel <span class="tag">LEFT JOIN</span></div>
+        </div>
+        <div class="table-wrapper">
+          <table id="dp-table">
+            <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Total Deliveries</th><th>Actions</th></tr></thead>
+            <tbody id="dp-body"><tr><td colspan="5"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════
+         DELIVERY TAB
+    ══════════════════════════ -->
+    <div class="tab-panel" id="tab-delivery">
+      <div class="page-header">
+        <div class="page-title">🛵 <span>Delivery Tracking</span></div>
+      </div>
+      <div class="btn-group" style="margin-bottom:16px">
+        <button class="btn btn-ghost btn-sm" onclick="loadDelivery()">All Deliveries <span class="dbms-tag join" style="margin-left:4px">4-JOIN</span></button>
+        <button class="btn btn-ghost btn-sm" onclick="loadLateDeliveries()">Late Deliveries (>14:00) <span class="dbms-tag dml" style="margin-left:4px">WHERE</span></button>
+      </div>
+      <div class="card">
+        <div class="card-title" id="delivery-view-title" style="margin-bottom:14px">All Deliveries</div>
+        <div class="table-wrapper">
+          <table id="delivery-table">
+            <thead><tr><th>ID</th><th>Customer</th><th>Delivery Person</th><th>Phone</th><th>Status</th><th>Time</th><th>Actions</th></tr></thead>
+            <tbody id="delivery-body"><tr><td colspan="7"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════
+         SQL QUERY LAB TAB
+    ══════════════════════════ -->
+    <div class="tab-panel" id="tab-queries">
+      <div class="page-header">
+        <div class="page-title">🔍 <span>SQL Query Lab</span></div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="query-categories" id="query-categories"></div>
+        <div class="query-list" id="query-list"></div>
+        <textarea class="sql-editor" id="sql-editor" placeholder="-- Click a query above or write your own SQL here..."></textarea>
+        <div style="display:flex; gap:10px; margin-top:12px; align-items:center;">
+          <button class="btn btn-primary" onclick="runQuery()">▶ Run Query</button>
+          <button class="btn btn-ghost" onclick="clearQuery()">🗑 Clear</button>
+          <div class="result-info" id="result-info"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📊 Query Results</div>
+        </div>
+        <div class="table-wrapper" id="query-result-wrapper">
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <p>Select a query and click <strong>Run Query</strong> to see results.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ═══════════════════════════════════
+     MODALS
+══════════════════════════════════════ -->
+
+<!-- Add Customer Modal -->
+<div class="modal-overlay" id="modal-add-customer">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">👤 Add New Customer <span class="dbms-tag dml">INSERT</span></div>
+      <button class="modal-close" onclick="closeModal('modal-add-customer')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Customer ID</label>
+        <input class="form-input" id="add-cust-id" type="number" placeholder="e.g. 11" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input class="form-input" id="add-cust-name" placeholder="e.g. Raj Patel" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input class="form-input" id="add-cust-phone" placeholder="e.g. 9876543220" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="add-cust-email" placeholder="e.g. raj@gmail.com" />
+      </div>
+      <div class="form-group" style="grid-column: span 2">
+        <label class="form-label">Address / City</label>
+        <input class="form-input" id="add-cust-address" placeholder="e.g. Ahmedabad" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-customer')">Cancel</button>
+      <button class="btn btn-primary" onclick="addCustomer()">➕ Add Customer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Restaurant Modal -->
+<div class="modal-overlay" id="modal-add-restaurant">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🏪 Add New Restaurant</div>
+      <button class="modal-close" onclick="closeModal('modal-add-restaurant')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Restaurant ID</label>
+        <input class="form-input" id="add-rest-id" type="number" placeholder="e.g. 111" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Restaurant Name</label>
+        <input class="form-input" id="add-rest-name" placeholder="e.g. Tasty Bites" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Location / City</label>
+        <input class="form-input" id="add-rest-loc" placeholder="e.g. Surat" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input class="form-input" id="add-rest-phone" placeholder="e.g. 9991110011" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-restaurant')">Cancel</button>
+      <button class="btn btn-orange" onclick="addRestaurant()">➕ Add Restaurant</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Menu Item Modal -->
+<div class="modal-overlay" id="modal-add-menu">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🍔 Add Menu Item <span class="dbms-tag trigger">TRIGGER fires</span></div>
+      <button class="modal-close" onclick="closeModal('modal-add-menu')">✕</button>
+    </div>
+    <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:14px;">⚡ The <strong>Check_Price</strong> trigger will fire — price must be > 0.</p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Item ID</label>
+        <input class="form-input" id="add-item-id" type="number" placeholder="e.g. 211" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Item Name</label>
+        <input class="form-input" id="add-item-name" placeholder="e.g. Butter Naan" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Price (₹)</label>
+        <input class="form-input" id="add-item-price" type="number" placeholder="e.g. 120" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <input class="form-input" id="add-item-cat" placeholder="e.g. Indian" />
+      </div>
+      <div class="form-group" style="grid-column: span 2">
+        <label class="form-label">Restaurant ID</label>
+        <input class="form-input" id="add-item-restid" type="number" placeholder="e.g. 102" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-menu')">Cancel</button>
+      <button class="btn btn-teal" onclick="addMenuItem()">➕ Add Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Delivery Person Modal -->
+<div class="modal-overlay" id="modal-add-dp">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🚴 Add Delivery Person</div>
+      <button class="modal-close" onclick="closeModal('modal-add-dp')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Person ID</label>
+        <input class="form-input" id="add-dp-id" type="number" placeholder="e.g. 11" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Name</label>
+        <input class="form-input" id="add-dp-name" placeholder="e.g. Ganesh" />
+      </div>
+      <div class="form-group" style="grid-column: span 2">
+        <label class="form-label">Phone</label>
+        <input class="form-input" id="add-dp-phone" placeholder="e.g. 9000000011" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-dp')">Cancel</button>
+      <button class="btn btn-primary" onclick="addDeliveryPerson()">➕ Add Person</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Customer Modal -->
+<div class="modal-overlay" id="modal-edit-customer">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">✏️ Update Customer <span class="dbms-tag dml">UPDATE</span></div>
+      <button class="modal-close" onclick="closeModal('modal-edit-customer')">✕</button>
+    </div>
+    <input type="hidden" id="edit-cust-id" />
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">New Phone</label>
+        <input class="form-input" id="edit-cust-phone" placeholder="New phone number" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">New Address</label>
+        <input class="form-input" id="edit-cust-address" placeholder="New city/address" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-edit-customer')">Cancel</button>
+      <button class="btn btn-primary" onclick="updateCustomer()">💾 Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
