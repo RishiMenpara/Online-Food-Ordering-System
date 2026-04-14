@@ -1,5 +1,14 @@
-create database if not exists FOS;
-use FOS;
+-- Aiven: using defaultdb (pre-created)
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS Delivery;
+DROP TABLE IF EXISTS Payment;
+DROP TABLE IF EXISTS Order_Item;
+DROP TABLE IF EXISTS Orders;
+DROP TABLE IF EXISTS Menu_Item;
+DROP TABLE IF EXISTS Restaurant;
+DROP TABLE IF EXISTS Customer;
+DROP TABLE IF EXISTS Delivery_Person;
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE Customer (
     CustomerID INT PRIMARY KEY,
@@ -108,7 +117,7 @@ INSERT INTO Delivery_Person VALUES
 
 
 INSERT INTO Menu_Item VALUES
-(201,'Margherita Pizza',250,'Pizza',101),
+(201,'Margherita Pizza',250,'Pizza',102), 
 (202,'Veg Burger',120,'Burger',102),
 (203,'Paneer Tikka',300,'Starter',103),
 (204,'Hakka Noodles',220,'Chinese',104),
@@ -121,7 +130,7 @@ INSERT INTO Menu_Item VALUES
 
 
 INSERT INTO Orders VALUES
-(301,'2026-03-10',500,1,101),
+(301,'2026-03-10',500,2,102), -- fixed customer & restaurant
 (302,'2026-03-11',300,2,102),
 (303,'2026-03-12',450,3,103),
 (304,'2026-03-13',350,4,104),
