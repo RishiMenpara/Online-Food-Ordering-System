@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api';
+const API = 'https://online-food-ordering-system-delta.vercel.app/api';
 
 // ═══════════════════════════════════════════════════
 // HELPERS
